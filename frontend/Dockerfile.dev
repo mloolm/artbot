@@ -1,0 +1,14 @@
+FROM node:20-alpine
+
+# Устанавливаем рабочую директорию
+WORKDIR /app
+
+# Копируем только файлы для установки зависимостей
+COPY package*.json ./
+
+
+RUN npm install
+
+COPY . .
+
+EXPOSE 5173
