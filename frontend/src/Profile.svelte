@@ -1,6 +1,6 @@
 <script>
     import { navigate } from 'svelte-routing';
-    import FormCard from './FormCard.svelte'; 
+    import FormCard from '../components/FormCard.svelte'; 
     import { onMount } from 'svelte';
 
     

@@ -37,9 +37,14 @@
         }
     }
 
+    function handleMakeLetter(id){
+        navigate(`/letter/${id}`);
+    }
+
     // Вспомогательная функция для получения русского названия страны по коду
     // (Подразумевается, что countryData доступен, или его нужно импортировать)
     import countryData from '../data/countries.json'; 
+    import Profile from '../src/Profile.svelte';
     const countryMap = new Map(Object.entries(countryData));
 
     function getCountryName(code) {
@@ -62,34 +67,45 @@
     {:else}
         <ul class="space-y-3">
             {#each profiles as profile (profile.id)}
-                <li class="bg-white p-4 rounded-lg shadow-md border-l-4 border-[#0088cc]">
-                    <div class="flex justify-between items-start">
-                        <div>
+               <li class="bg-white p-4 rounded-lg shadow-md border-l-4 border-[#0088cc] space-y-3">
+                    
+                    <div class="flex justify-between items-center w-full"> 
+                        <div class=""> 
                             <p class="text-lg font-semibold text-gray-900">
                                 {profile.firstName} {profile.lastName}
                             </p>
                             <p class="text-sm text-gray-600">
                                 Гражданство: {getCountryName(profile.citizenshipCode)}
                             </p>
-                            
                         </div>
                         
                         <div class="flex space-x-2">
                             <button 
                                 on:click={() => handleEdit(profile.id)}
-                                class="p-2 text-sm bg-blue-500 text-white rounded-full hover:bg-blue-600 transition"
+                                class="p-2 inline-block text-sm bg-blue-500 text-white rounded-full hover:bg-blue-600 transition"
                                 title="Редактировать"
                             >
                                 ✏️
                             </button>
                             <button 
                                 on:click={() => handleDelete(profile.id)}
-                                class="p-2 text-sm bg-red-500 text-white rounded-full hover:bg-red-600 transition"
+                                class="p-2 inline-block ml-3 text-sm bg-white-500 text-white rounded-full hover:bg-red-100 transition"
                                 title="Удалить"
                             >
-                                🗑️
+                                ❌
                             </button>
                         </div>
+                    </div>
+                    
+                    <div class=py-2>
+                    <button
+                        on:click={() => handleMakeLetter(profile.id)}
+                        class="w-full text-white px-6 py-3 hover:bg-blue-600 transition bg-[#0088cc]"
+                        title="Сформировать письмо"
+                    >
+                        Сформировать письмо
+                    </button>    
+
                     </div>
                 </li>
             {/each}

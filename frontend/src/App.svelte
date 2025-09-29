@@ -1,8 +1,9 @@
 <script>
   import { onMount } from "svelte";
   import { Router, Route, navigate } from "svelte-routing";
-  import ProfileList from './ProfileList.svelte';      // Новый компонент для списка
-  import ProfileFormPage from './Profile.svelte'; // Единый компонент для формы
+  import ProfileList from '../components/ProfileList.svelte';      // компонент для списка
+  import ProfileFormPage from './Profile.svelte'; // компонент для формы профиля
+  import Letter from './Letter.svelte'; //компонент формы для формирования письма
   import './app.css';
 
   let user = null;
@@ -55,6 +56,10 @@
 
     <Route path="/profile/edit/:id" let:params>
         <ProfileFormPage id={params.id} />
+    </Route>
+
+     <Route path="/letter/:id" let:params>
+        <Letter id={params.id} />
     </Route>
   </Router>
 </main>
