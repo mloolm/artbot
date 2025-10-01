@@ -7,34 +7,27 @@ router = APIRouter()
 
 # --- ФИКСИРОВАННЫЕ ТЕСТОВЫЕ ДАННЫЕ ДЛЯ GET-ЗАПРОСА ОТЛАДКИ ---
 # ВНИМАНИЕ: Все ключи и структура должны соответствовать моделям ApplicationData и ItemData
+
 TEST_PAYLOAD = {
-    "first_name": "Pavel",
-    "last_name": "Petrov",
-    "citizenship": "ამერიკის შეერთებული შტატების",
-    "country_to": "უზბეკეთისკენ",
-    "email": "pavel@google.com",
+    "first_name": "PAVEL",
+    "last_name": "PETROV",
+    "email": "ggg@gmail.com",
+    "citizenship": "ამერიკული სამოას",
+    "country_to": "ანდორასკენ",
     "items": [
         {
-            "reason": "ეს ნახატი შევიძინე ავტორისგან.",
-            "item_type": "ნახატი",
-            "item_type_rod": "ნახატის",
-            "name": "ცეცხლი და ყვავილები",
-            "size": "44x33",
+            "name": "PAINTING NAME",
+            "size": "44x55",
             "dimension": "სმ",
-            "medium": "ზეთი",
-            "medium_base":"ტილო"
-        },
-        {
             "reason": "მე ვარ ამ ნამუშევრის ავტორი.",
             "item_type": "ნახატი",
             "item_type_rod": "ნახატის",
-            "name": "გზა",
-            "size": "66x43",
-            "dimension": "სმ",
-            "medium": "აკვარელი",
-            "medium_base":"ტილო"
+            "medium": "ზეთი",
+            "medium_base": "ტილო"
         }
-    ]
+    ],
+    "is_twa": False,
+    "telegram_user_id": 0
 }
 
 

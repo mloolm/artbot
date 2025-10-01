@@ -22,6 +22,9 @@ class ApplicationData(BaseModel):
     citizenship: str = Field(..., description="Гражданство в грузинском именительном падеже.")
     country_to: str = Field(..., description="Страна назначения в направительном падеже (напр., 'უზბეკეთისკენ').")
     email: str
+    telegram_user_id:int
+    is_twa:bool
+
 
     # НОВОЕ ПОЛЕ: Список предметов
     items: List[ItemData] = Field(..., description="Список предметов для вывоза.")
@@ -42,7 +45,8 @@ class ApplicationData(BaseModel):
                         "name": "Item name 1",
                         "size": "44x33",
                         "dimension": "cm",
-                        "medium": "ზეთი ტილოზე"
+                        "medium": "ზეთი",
+                        "medium_base": "ტილო"
                     },
                     {
                         "reason": "მე ვარ ამ ნამუშევრის ავტორი.",
@@ -51,7 +55,8 @@ class ApplicationData(BaseModel):
                         "name": "Item name 2",
                         "size": "66x43",
                         "dimension": "cm",
-                        "medium": "ზეთი ტილოზე"
+                        "medium": "ზეთი",
+                        "medium_base": "ტილო"
                     }
                 ]
             }

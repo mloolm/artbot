@@ -2,6 +2,7 @@
 
 from typing import List, Optional
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 # Импортируем роутер, который мы определили
 from .routes import router
@@ -12,6 +13,18 @@ app = FastAPI(
     title="Letter Generation API",
     description="API для формирования официальных документов (заявлений) в PDF.",
     version="1.0.0",
+)
+origins = [
+    "http://localhost:5173",  
+    "http://127.0.0.1:5173",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,              # Разрешенные домены
+    allow_credentials=True,             # Разрешить куки и авторизацию
+    allow_methods=["*"],                # Разрешить все методы (GET, POST, OPTIONS и т.д.)
+    allow_headers=["*"],                # Разрешить все заголовки
 )
 
 
