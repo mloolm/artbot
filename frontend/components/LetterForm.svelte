@@ -15,13 +15,48 @@
     }));
     const countryMap = new Map(countries.map(c => [c.code, c]));
 
+    import typeData from '../data/types.json';
+    const typeDataVals = Object.values(typeData); 
+    const default_item_type = typeDataVals[0][0];
+    const default_item_type_rod = typeDataVals[0][1];
+    
+    import reasonData from '../data/reasons.json';
+    const reasonDataVals = Object.values(reasonData); 
+    const default_reason = reasonDataVals[0][1];
+
+
+    import mediumData from '../data/mediums.json';
+    const mediumDataVals = Object.values(mediumData); 
+    const default_medium = mediumDataVals[0];
+
+
+    import mediumBaseData from '../data/mediums_base.json';
+    const mediumBaseDataVals = Object.values(mediumBaseData); 
+    const default_medium_base = mediumBaseDataVals[0];
+
+
     // --- ФОРМА ИЗ PISMA (Письма) ---
     export let countryToInput = ''; 
     export let countryToCode = ''; 
+
+    function getEmptyWorkObject()
+    {
+        return { 
+            id: Date.now(), 
+            name: '', 
+            size: '', 
+            dimension: 'სმ',
+            item_type:default_item_type,
+            item_type_rod:default_item_type_rod,
+            reason:default_reason,
+            medium: default_medium,
+            medium_base:default_medium_base
+        }
+    }
     
     // Список работ (инициализируем одной пустой работой)
     export let items = [
-        { id: Date.now(), name: '', size: '', dimension: 'см' }
+        getEmptyWorkObject()
     ];
 
     // --- ЛОГИКА COUNTRY_TO ---
@@ -46,7 +81,7 @@
     // --- ЛОГИКА РАБОТ (ITEMS) ---
     
     function addWork() {
-        items = [...items, { id: Date.now(), name: '', size: '', dimension: 'см' }];
+        items = [...items, getEmptyWorkObject()];
     }
 
     function handleWorkUpdate(event) {
@@ -58,6 +93,7 @@
 
     function handleWorkDelete(event) {
         const idToDelete = event.detail;
+        console.log(items, idToDelete);
         items = items.filter(item => item.id !== idToDelete);
     }
 
@@ -80,15 +116,14 @@
             countryToCode,
             countryToValue,
             items: items.map(item => ({
-                // Мы отправляем только введенные пользователем поля
                 name: item.name,
                 size: item.size,
                 dimension: item.dimension,
-                // ДОБАВИТЬ: Здесь можно добавить заглушки для будущих полей
-                reason: "ეს ნახატი შევიძინე ავტორისგან.", 
-                item_type: "ნახატი",
-                item_type_rod: "ნახატის",
-                medium: "ზეთი ტილოზე"
+                reason: item.reason, 
+                item_type: item.item_type,
+                item_type_rod: item.item_type_rod,
+                medium: item.medium,
+                medium_base: item.medium_base
             }))
         });
     }
@@ -135,7 +170,14 @@
 
         <div class="space-y-4">
             {#each items as item (item.id)}
-                <WorkItem work={item} on:update={handleWorkUpdate} on:delete={handleWorkDelete} />
+                <WorkItem 
+                work={item} 
+                workId={item.id} 
+                typeData={typeData}
+                reasonData={reasonData}
+                mediumData={mediumData}
+                mediumBaseData={mediumBaseData}
+                on:update={handleWorkUpdate} on:delete={handleWorkDelete} />
             {/each}
         </div>
 

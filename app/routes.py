@@ -21,7 +21,8 @@ TEST_PAYLOAD = {
             "name": "ცეცხლი და ყვავილები",
             "size": "44x33",
             "dimension": "სმ",
-            "medium": "ზეთი ტილოზე"
+            "medium": "ზეთი",
+            "medium_base":"ტილო"
         },
         {
             "reason": "მე ვარ ამ ნამუშევრის ავტორი.",
@@ -30,7 +31,8 @@ TEST_PAYLOAD = {
             "name": "გზა",
             "size": "66x43",
             "dimension": "სმ",
-            "medium": "აკვარელი"
+            "medium": "აკვარელი",
+            "medium_base":"ტილო"
         }
     ]
 }
