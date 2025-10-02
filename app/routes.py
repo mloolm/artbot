@@ -1,91 +1,80 @@
 from fastapi import APIRouter, HTTPException
 from fastapi.responses import Response
-from models.schemas import ApplicationData  # ApplicationData и ItemData теперь здесь
+# Предполагаем, что ApplicationData теперь импортируется корректно
+from models.schemas import ApplicationData
 from models.letter import generate_application_pdf
+from models.telegram_api import send_document_to_chat
 
 router = APIRouter()
-
-# --- ФИКСИРОВАННЫЕ ТЕСТОВЫЕ ДАННЫЕ ДЛЯ GET-ЗАПРОСА ОТЛАДКИ ---
-# ВНИМАНИЕ: Все ключи и структура должны соответствовать моделям ApplicationData и ItemData
-
-TEST_PAYLOAD = {
-    "first_name": "PAVEL",
-    "last_name": "PETROV",
-    "email": "ggg@gmail.com",
-    "citizenship": "ამერიკული სამოას",
-    "country_to": "ანდორასკენ",
-    "items": [
-        {
-            "name": "PAINTING NAME",
-            "size": "44x55",
-            "dimension": "სმ",
-            "reason": "მე ვარ ამ ნამუშევრის ავტორი.",
-            "item_type": "ნახატი",
-            "item_type_rod": "ნახატის",
-            "medium": "ზეთი",
-            "medium_base": "ტილო"
-        }
-    ],
-    "is_twa": False,
-    "telegram_user_id": 0
-}
-
-
-@router.get(
-    "/letter/",
-    summary="[DEBUG] Сформировать тестовое заявление PDF",
-    response_description="Тестовый PDF-документ (application/pdf)"
-)
-def letter_get():
-    """
-    Маршрут для отладки. Генерирует PDF, используя фиксированные тестовые данные.
-    """
-
-    try:
-        # 1. Валидируем тестовые данные через Pydantic
-        data = ApplicationData(**TEST_PAYLOAD)
-        data_dict = data.model_dump()
-
-        # 2. Генерируем PDF-содержимое
-        pdf_content = generate_application_pdf(data_dict)
-
-        # 3. Возвращаем PDF в браузер (или клиент)
-        return Response(
-            content=pdf_content,
-            media_type="application/pdf",
-            headers={
-                "Content-Disposition": "inline; filename=test_application.pdf"
-            }
-        )
-    except Exception as e:
-        print(f"Ошибка генерации тестового PDF: {e}")
-        # Возвращаем просто текст в случае ошибки для удобства отладки в браузере
-        return {"error": "Не удалось создать тестовый PDF", "details": str(e)}
 
 
 @router.post(
     "/letter/",
-    summary="Сформировать заявление на вывоз предмета искусства в формате PDF",
-    response_description="Сформированный PDF-документ (application/pdf) в виде байтов"
+    summary="Сформировать заявление на вывоз предмета искусства",
+    response_description="PDF-документ (браузер) или JSON-статус (TWA)"
 )
-def create_application_letter(data: ApplicationData):
+async def create_application_letter(data: ApplicationData):
     """
-    Принимает необходимые данные и генерирует готовое заявление в формате PDF.
-    Возвращает бинарное содержимое.
+    Принимает данные, генерирует PDF и:
+    1. Если TWA=true, отправляет файл в Telegram и возвращает JSON-статус.
+    2. Иначе, возвращает бинарный PDF для скачивания в браузере.
     """
 
     data_dict = data.model_dump()
+    pdf_content = None
 
     try:
         # 1. Генерируем PDF-содержимое (bytes)
         pdf_content = generate_application_pdf(data_dict)
-
-        # 2. Возвращаем HTTP-ответ с бинарным содержимым
-        return Response(
-            content=pdf_content,
-            media_type="application/pdf"
-        )
-
     except Exception as e:
         print(f"Ошибка генерации PDF: {e}")
+        # Возвращаем 500 ошибку, если не удалось создать PDF
         raise HTTPException(status_code=500, detail=f"Не удалось создать PDF-документ: {e}")
+
+    # --- УСЛОВНАЯ ЛОГИКА ОТВЕТА ---
+
+
+    if data.is_twa and data.telegram_user_id:
+        # 🔥 РЕЖИМ 1: TWA (Telegram Web App)
+
+        chat_id = data.telegram_user_id
+        # Устанавливаем имя файла для Telegram (он сам его отобразит)
+        filename = f"Application_{data.last_name}.pdf"
+        caption = f"Ваше заявление на вывоз предмета искусства, {data.last_name}."
+
+        print(chat_id, filename, caption)
+
+        # Асинхронно отправляем файл в чат
+        telegram_result = await send_document_to_chat(
+            chat_id=chat_id,
+            document_content=pdf_content,
+            filename=filename,
+            caption=caption
+        )
+
+        if telegram_result:
+            # Возвращаем JSON-ответ, который ждет фронтенд TWA
+            return {
+                "status": "ok",
+                "message": "Файл успешно отправлен в чат Telegram."
+            }
+        else:
+            # Если Telegram API вернул ошибку
+            raise HTTPException(status_code=500,
+                                detail="Ошибка при отправке файла в Telegram. Проверьте токен и chat_id.")
+
+    else:
+        # 🔥 РЕЖИМ 2: Браузер (Standalone) - оставляем как есть
+
+        # Устанавливаем имя файла для скачивания в браузере
+        filename = f"Application_{data.last_name}.pdf"
+
+        # Возвращаем HTTP-ответ с бинарным содержимым
+        return Response(
+            content=pdf_content,
+            media_type="application/pdf",
+            headers={
+                # "attachment" - принуждает браузер к скачиванию
+                "Content-Disposition": f"attachment; filename={filename}"
+            }
+        )
