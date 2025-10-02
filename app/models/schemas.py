@@ -12,6 +12,7 @@ class ItemData(BaseModel):
     size: str = Field(..., description="Размеры (напр., '44x33').")
     dimension: str = Field(..., description="Единица измерения (напр., 'cm').")
     medium: str = Field(..., description="Техника/Материал (груз.).")
+    medium_base: str = Field(..., description="База - холст, доска, картон (груз.).")
 
 
 # --- Модель для всего запроса ---

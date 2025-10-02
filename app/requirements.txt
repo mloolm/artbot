@@ -4,5 +4,6 @@ aiogram
 python-telegram-bot
 py3o.template
 jinja2
+
 weasyprint
 watchfiles

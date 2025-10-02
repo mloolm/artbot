@@ -49,10 +49,16 @@ def generate_application_pdf(data: dict) -> bytes:
     #фОРМИРУЕМ СПИСОК РАБОТ
     list_html = ""
 
+
+
     for num, art_data in enumerate(items):
+        medium = art_data['medium']
+        if art_data['medium_base']:
+            medium=f"{medium}, {art_data['medium_base']}"
+
         if item_count > 1:
             list_html += f"{num+1}) "
-        list_html+=f"{art_data['item_type']}, \"{art_data['name']}\", {art_data['size']}{art_data['dimension']}, {art_data['medium']}"
+        list_html+=f"{art_data['item_type']}, \"{art_data['name']}\", {art_data['size']}{art_data['dimension']}, {medium}"
         if item_count>1:
             list_html+=f". {art_data['reason']}"
         list_html+='<br>'

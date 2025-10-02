@@ -41,4 +41,4 @@ EXPOSE 8000
 
 # Команда запуска с горячей перезагрузкой (--reload)
 # Uvicorn теперь будет следить за изменениями в app/ и перезапускаться
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]

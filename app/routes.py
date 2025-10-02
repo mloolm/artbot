@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException
 from fastapi.responses import Response
-from .models.schemas import ApplicationData  # ApplicationData и ItemData теперь здесь
-from .models.letter import generate_application_pdf
+from models.schemas import ApplicationData  # ApplicationData и ItemData теперь здесь
+from models.letter import generate_application_pdf
 
 router = APIRouter()
 

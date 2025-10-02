@@ -2,7 +2,7 @@ version: "3.9"
 
 services:
   artbot:
-    build: .
+    build: ./app
     container_name: artbot_dev
     restart: always
     ports:
@@ -10,7 +10,7 @@ services:
     env_file:
       - .env
     volumes:
-      - .:/app
+      - ./app:/app
 
   frontend:
     build:

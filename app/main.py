@@ -5,7 +5,9 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 # Импортируем роутер, который мы определили
-from .routes import router
+from routes import router
+from telegram_router import router as tlg_router
+
 
 
 # --- Приложение FastAPI ---
@@ -42,5 +44,10 @@ app.include_router(
     prefix="", # Оставляем префикс пустым, чтобы маршрут был доступен как /letter/
     tags=["documents"] # Группируем маршруты в документации
 )
+
+app.include_router(
+    tlg_router
+)
+
 
 # Теперь ваш эндпоинт POST /letter/ доступен!
