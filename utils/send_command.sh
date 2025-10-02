@@ -14,7 +14,7 @@ API_URL="http://localhost:8000"
 
 # 3. ID чата и текст сообщения (команда /instructions)
 CHAT_ID=41416491  # Произвольный ID для отладки
-MESSAGE_TEXT="/instructions"
+MESSAGE_TEXT="/start"
 
 # Структура JSON, которую Telegram отправляет на ваш вебхук
 JSON_PAYLOAD=$(cat <<EOF
