@@ -20,6 +20,7 @@ async def create_application_letter(data: ApplicationData):
     2. Иначе, возвращает бинарный PDF для скачивания в браузере.
     """
 
+
     data_dict = data.model_dump()
     pdf_content = None
 
