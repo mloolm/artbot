@@ -38,6 +38,8 @@ class ApplicationData(BaseModel):
                 "citizenship": "ამერიკის შეერთებული შტატების",
                 "country_to": "უზბეკეთისკენ",
                 "email": "pavel@google.com",
+                "is_twa": True,
+                "telegram_user_id": 123456,
                 "items": [
                     {
                         "reason": "ეს ნახატი შევიძინე ავტორისგან.",

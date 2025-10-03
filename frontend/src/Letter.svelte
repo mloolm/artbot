@@ -56,6 +56,11 @@ if(IS_TWA)
     }   
 }
 
+if(!telegramUserId)
+{
+    IS_TWA = false;
+}
+
 // --- ФУНКЦИЯ: ОТПРАВКА ДАННЫХ И ПОЛУЧЕНИЕ JSON-СТАТУСА ---
 async function postLetterData(data) {
     if (!API_BASE_URL) {

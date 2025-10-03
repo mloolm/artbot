@@ -4,6 +4,7 @@ from fastapi.responses import Response
 from models.schemas import ApplicationData
 from models.letter import generate_application_pdf
 from models.telegram_api import send_document_to_chat
+import datetime
 
 router = APIRouter()
 
@@ -40,10 +41,10 @@ async def create_application_letter(data: ApplicationData):
 
         chat_id = data.telegram_user_id
         # Устанавливаем имя файла для Telegram (он сам его отобразит)
-        filename = f"Application_{data.last_name}.pdf"
-        caption = f"Ваше заявление на вывоз предмета искусства, {data.last_name}."
-
-        print(chat_id, filename, caption)
+        filename = f"Application_{data.first_name}_{data.last_name}.pdf"
+        current_date = datetime.datetime.now()
+        formatted_date = current_date.strftime("%d.%m.%y")
+        caption = f"Заявление от {data.first_name} {data.last_name} ({formatted_date}) ."
 
         # Асинхронно отправляем файл в чат
         telegram_result = await send_document_to_chat(
@@ -65,7 +66,7 @@ async def create_application_letter(data: ApplicationData):
                                 detail="Ошибка при отправке файла в Telegram. Проверьте токен и chat_id.")
 
     else:
-        # 🔥 РЕЖИМ 2: Браузер (Standalone) - оставляем как есть
+        # РЕЖИМ 2: Браузер (Standalone)
 
         # Устанавливаем имя файла для скачивания в браузере
         filename = f"Application_{data.last_name}.pdf"
@@ -75,7 +76,6 @@ async def create_application_letter(data: ApplicationData):
             content=pdf_content,
             media_type="application/pdf",
             headers={
-                # "attachment" - принуждает браузер к скачиванию
                 "Content-Disposition": f"attachment; filename={filename}"
             }
         )

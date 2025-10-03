@@ -1,14 +1,9 @@
-# /app/main.py (Или ваш основной файл приложения)
-
 from typing import List, Optional
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-# Импортируем роутер, который мы определили
 from routes import router
 from telegram_router import router as tlg_router
-
-
 
 # --- Приложение FastAPI ---
 app = FastAPI(
@@ -16,17 +11,17 @@ app = FastAPI(
     description="API для формирования официальных документов (заявлений) в PDF.",
     version="1.0.0",
 )
+
 origins = [
-    "http://localhost:5173",  
-    "http://127.0.0.1:5173",
+   "*"
 ]
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,              # Разрешенные домены
-    allow_credentials=True,             # Разрешить куки и авторизацию
-    allow_methods=["*"],                # Разрешить все методы (GET, POST, OPTIONS и т.д.)
-    allow_headers=["*"],                # Разрешить все заголовки
+    allow_origins=origins,              
+    allow_credentials=True,             
+    allow_methods=["*"],                
+    allow_headers=["*"],                
 )
 
 

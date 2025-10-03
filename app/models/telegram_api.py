@@ -1,4 +1,3 @@
-# telegram_helpers.py
 import httpx
 import os
 from typing import Optional

@@ -1,5 +1,3 @@
-# /app/models/letter.py
-
 from jinja2 import Environment, FileSystemLoader
 from weasyprint import HTML
 import os
@@ -7,7 +5,7 @@ from io import BytesIO  # Используем буфер в памяти
 from datetime import datetime
 from typing import List, Dict
 
-# Указываем, где искать шаблон (в корне WORKDIR)
+# Указываем, где искать шаблон 
 TEMPLATE_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
 template_loader = FileSystemLoader(searchpath=TEMPLATE_DIR)
 env = Environment(loader=template_loader)
@@ -48,8 +46,6 @@ def generate_application_pdf(data: dict) -> bytes:
 
     #фОРМИРУЕМ СПИСОК РАБОТ
     list_html = ""
-
-
 
     for num, art_data in enumerate(items):
         medium = art_data['medium']
