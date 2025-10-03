@@ -40,8 +40,6 @@
         'м': 'მ'
     };
 
-    
-
     function updateWork() {
         dispatch('update', {
             id: workId,
@@ -52,8 +50,6 @@
     onDestroy(() => {
         // Очистка или что-то еще, если потребуется
     });
-
-    console.log(work);
 </script>
 
 <div class="p-4 bg-gray-50 border border-gray-200 rounded-lg space-y-3">
@@ -99,15 +95,15 @@
     </div>
     <div class="flex space-x-3">
         <div class="space-y-1 flex-grow">
-            <label for="work-size-{workId}" class="block text-sm font-medium text-gray-700">Размер (например, 44x33)</label>
+            <label for="work-size-{workId}" class="block text-sm font-medium text-gray-700">Размер</label>
             <input
                 id="work-size-{workId}"
                 type="text"
-                placeholder="44x33"
+                placeholder="30x40 или 20x20x10"
                 bind:value={work.size}
                 on:input={updateWork}
                 required
-                class="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+                class="w-full p-2 border border-gray-300 rounded-md text-sm focus:ring-2 focus:ring-blue-500"
             />
         </div>
         <div class="space-y-1 w-24">
@@ -158,7 +154,7 @@
         </div>
     </div>
      <div class="w-full space-y-1">
-        <label for="work-reason-{workId}" class="block text-sm font-medium text-gray-700">Основание владения</label>
+        <label for="work-reason-{workId}" class="block text-sm font-medium text-gray-700">Откуда у вас эта работа?</label>
         <select
             id="work-reason-{workId}"
             bind:value={work.reason}

@@ -10,8 +10,8 @@
     code: code,
     englishName: names[0],  
     russianName: names[1],  
-    valueCitizenship: names[3], // Только это значение нам нужно для отправки
-    // valueCountryTo: names[4] - УДАЛЕНО
+    valueCitizenship: names[3], 
+    
   }));
 
   // Карта для быстрого поиска названий по коду
@@ -22,12 +22,12 @@
   export let lastName = '';
   export let email = ''; 
   
-  // Код гражданства (countryToCode УДАЛЕНО)
+  // Код гражданства
   export let citizenshipCode = ''; 
   
   // --- ЛОКАЛЬНЫЕ ПЕРЕМЕННЫЕ ---
   let citizenshipInput = ''; 
-  // let countryToInput = ''; - УДАЛЕНО
+  
 
   // --- ЛОГИКА АВТОПОДСТАНОВКИ ---
 
@@ -41,10 +41,10 @@
       );
   }
 
-  // Вычисляемый список стран для Гражданства (логика для countryTo УДАЛЕНА)
+  // Вычисляемый список стран для Гражданства 
   $: filteredCitizenshipCountries = filterCountries(citizenshipInput);
   
-  // Проверка выбора страны (логика для countryTo УДАЛЕНА)
+  // Проверка выбора страны 
   $: isCitizenshipSelected = citizenshipCode && countryMap.get(citizenshipCode)?.russianName === citizenshipInput;
 
 
@@ -56,8 +56,6 @@
       if (country) citizenshipInput = country.russianName;
   }
   
-  // Логика синхронизации для countryToCode УДАЛЕНА
-
   // --- ОБРАБОТЧИКИ ВЫБОРА ---
 
   function selectCitizenship(country) {
@@ -65,13 +63,11 @@
     citizenshipCode = country.code; // Устанавливаем код
   }
   
-  // Функция selectCountryTo УДАЛЕНА
-
   // --- ОБРАБОТЧИК ОТПРАВКИ ФОРМЫ ---
   function handleSubmit() {
     // Находим финальное значение для отправки
     const citizenshipValue = countryMap.get(citizenshipCode)?.valueCitizenship;
-    // const countryToValue = ... - УДАЛЕНО
+
     
     // Отправляем событие 'submit' с обновленным набором данных
     dispatch('submit', { 
@@ -80,8 +76,6 @@
       email, 
       citizenshipCode,
       citizenshipValue,
-      // countryToCode, - УДАЛЕНО
-      // countryToValue - УДАЛЕНО
     });
   }
 </script>
@@ -89,7 +83,7 @@
 <form on:submit|preventDefault={handleSubmit} class="space-y-4">
 
   <div class="space-y-1">
-    <label for="firstName" class="block font-medium text-gray-700">Имя</label>
+    <label for="firstName" class="block font-medium text-gray-700">Имя (как в загранпаспорте)</label>
     <input
       id="firstName"
       type="text"
@@ -101,7 +95,7 @@
   </div>
 
   <div class="space-y-1">
-    <label for="lastName" class="block font-medium text-gray-700">Фамилия</label>
+    <label for="lastName" class="block font-medium text-gray-700">Фамилия (как в загранпаспорте)</label>
     <input
       id="lastName"
       type="text"

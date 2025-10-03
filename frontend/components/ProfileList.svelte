@@ -42,7 +42,6 @@
     }
 
     // Вспомогательная функция для получения русского названия страны по коду
-    // (Подразумевается, что countryData доступен, или его нужно импортировать)
     import countryData from '../data/countries.json'; 
     import Profile from '../src/Profile.svelte';
     const countryMap = new Map(Object.entries(countryData));
@@ -62,7 +61,7 @@
 
     {#if profiles.length === 0}
         <div class="p-4 bg-yellow-100 text-yellow-800 rounded-lg text-center">
-            У вас пока нет сохраненных профилей.
+            Для начала добавьте профиль человека, который будет вывозить или отправлять работу(работы)
         </div>
     {:else}
         <ul class="space-y-3">

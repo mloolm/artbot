@@ -47,7 +47,7 @@
         }
     });
 
-    // --- ЛОГИКА LOCAL STORAGE (скопирована из Profile.svelte) ---
+    // --- ЛОГИКА LOCAL STORAGE 
 
     function loadProfiles() {
         try {

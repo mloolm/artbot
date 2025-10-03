@@ -23,6 +23,7 @@
             
             if (foundProfile) {
                 profile = foundProfile;
+                
             } else {
                 alert('Профиль не найден! Возврат к списку.');
                 navigate('/');
@@ -34,7 +35,7 @@
     });
 
 
-// 🔥 ВАЖНО: Получаем базовый URL из переменных окружения
+// Получаем базовый URL из переменных окружения
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 let IS_TWA = false;
@@ -44,11 +45,16 @@ if(typeof window.Telegram != 'undefined')
     {
         IS_TWA = true;
     }
-    
 }
 
-const telegramUserId = IS_TWA ? parseInt(window.Telegram.WebApp.initDataUnsafe?.user?.id) : 0;
-
+let telegramUserId = 0;
+if(IS_TWA)
+{
+    if(typeof window.Telegram.WebApp.initDataUnsafe.user !== 'undefined')
+    {
+        telegramUserId = parseInt(window.Telegram.WebApp.initDataUnsafe?.user?.id);
+    }   
+}
 
 // --- ФУНКЦИЯ: ОТПРАВКА ДАННЫХ И ПОЛУЧЕНИЕ JSON-СТАТУСА ---
 async function postLetterData(data) {
@@ -58,8 +64,11 @@ async function postLetterData(data) {
         return;
     }
     
-    const fullUrl = `${API_BASE_URL}/letter/`;
+    //For test
+    //IS_TWA=true; telegramUserId = 41416491;
 
+    const fullUrl = `${API_BASE_URL}/letter/`;
+    
     // Добавляем метаданные для бэкенда
     const dataToSend = {
         ...data,
@@ -79,19 +88,19 @@ async function postLetterData(data) {
 
         
         
-        if (IS_TWA) {
-            // 🔥 РЕЖИМ TWA: Ожидаем JSON-статус. Бэкенд сам отправил файл в чат.
+        if (IS_TWA && telegramUserId) {
+            //РЕЖИМ TWA: Ожидаем JSON-статус. Бэкенд сам отправил файл в чат.
             const result = await response.json(); 
             
-            console.log("Успешный TWA-ответ:", result);
+            //console.log("Успешный TWA-ответ:", result);
             alert(`Письмо сгенерировано! ${result.message || 'Проверьте чат Telegram.'}`);
             
-            // Опционально: закрываем TWA
-            // window.Telegram.WebApp.close(); 
+            // закрываем TWA
+            window.Telegram.WebApp.close(); 
 
         } else {
-            alert('sss');
-            // 🔥 РЕЖИМ БРАУЗЕРА: Ожидаем бинарный файл (PDF Blob) и скачиваем его.
+           
+            //РЕЖИМ БРАУЗЕРА: Ожидаем бинарный файл (PDF Blob) и скачиваем его.
             
             // 1. Получаем Blob
             const blob = await response.blob(); 
@@ -120,12 +129,12 @@ async function postLetterData(data) {
             a.remove();
             window.URL.revokeObjectURL(url);
 
-            console.log(`Файл ${filename} успешно загружен в браузере.`);
-            alert("Письмо успешно сгенерировано и скачано.");
+            //console.log(`Файл ${filename} успешно загружен в браузере.`);
+            
         }
 
     } catch (error) {
-        console.error("Ошибка при отправке данных на бэкенд:", error);
+        console.error("Ошибка при отправке данных на сервер:", error);
         alert(`Не удалось сгенерировать письмо. Ошибка: ${error.message}`);
     }
 }
@@ -146,7 +155,7 @@ async function postLetterData(data) {
         items: formItems 
     };
 
-    console.log("Финальная структура для отправки:", finalData);
+    //console.log("Финальная структура для отправки:", finalData);
     
     // 2. Отправляем данные на бэкенд
     // Оборачиваем в .catch, если не хотим делать handleLetterSubmit асинхронным
@@ -156,14 +165,14 @@ async function postLetterData(data) {
 </script>
 
 <div class="max-w-md mx-auto p-6 bg-gray-100 flex flex-col space-y-6 mt-10">
-    <h2 class="text-2xl font-bold text-[#0088cc] border-b pb-4 text-center">
+    <h2 class="text-1xl font-semibold text-[#0088cc] border-b pb-4 text-center">
         Генерация письма
     </h2>
 
     {#if profile}
         <div class="p-3 bg-blue-100 border border-blue-300 rounded-lg text-sm">
             <p><strong>Профиль:</strong> {profile.firstName} {profile.lastName}</p>
-            <p><strong>Гражданство (Value):</strong> {profile.citizenshipValue}</p>
+            <p><strong>Гражданство:</strong> {profile.citizenshipCode}</p>
         </div>
         
         <LetterForm 

@@ -6,13 +6,22 @@
   import Letter from './Letter.svelte'; //компонент формы для формирования письма
   import './app.css';
 
-  let user = null;
-
+  let user = 0;
+  let is_inside_telegram = false;  
   onMount(() => {
     if (window.Telegram?.WebApp) {
       const tg = window.Telegram.WebApp;
       tg.ready();
-      user = tg.initDataUnsafe?.user;
+      if(typeof tg.initDataUnsafe.user !== 'undefined')
+      {
+        user = tg.initDataUnsafe.user;
+      }
+      
+      if(user)
+      {
+        is_inside_telegram = true;
+      }
+      is_inside_telegram = true;
     }
   });
 
@@ -20,25 +29,22 @@
   function goToProfileAddPage() {
       navigate('/profile/add');
   }
+
+  function closeApp(){
+    if(is_inside_telegram)
+    {
+         window.Telegram.WebApp.close(); 
+    }
+  }
 </script>
 
 <main class="min-h-screen bg-gray-100 p-6 flex flex-col items-center justify-start space-y-6">
   <Router>
     <Route path="/">
-        <h1 class="text-3xl font-extrabold text-[#0088cc] text-center">
-            Привет из Telegram WebApp 🚀
-        </h1>
+        <h2 class="text-1xl font-semibold text-[#0088cc] text-center">
+            Делаем разрешение на вывоз произведений искусства из Грузии
+        </h2>
         
-        {#if user}
-            <p class="p-3 bg-blue-100 text-blue-800 rounded-lg font-semibold text-center shadow-sm">
-                Ты зашёл как: **{user.first_name} {user.last_name}**
-            </p>
-        {:else}
-            <p class="p-3 bg-yellow-100 text-yellow-800 rounded-lg font-medium text-center shadow-sm">
-                Данные пользователя не загружены.
-            </p>
-        {/if}
-
         <ProfileList />
 
         <button
@@ -47,6 +53,16 @@
         >
             Добавить новый профиль
         </button>
+
+
+        {#if is_inside_telegram}
+            <div class="mt-5 pt-5">
+                <button
+                    on:click={closeApp} 
+                    class="px-6 py-3 text-gray rounded-xl bg-[#999999]"
+                >Выйти и вернуться в bot</button>
+            </div>
+        {/if}    
 
     </Route>
 
