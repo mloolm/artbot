@@ -1,7 +1,7 @@
 version: "3.9"
 
 services:
-  artbot:
+  artbot_dev:
     build: ./app
     container_name: artbot_dev
     restart: always
@@ -11,8 +11,9 @@ services:
       - .env
     volumes:
       - ./app:/app
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
 
-  frontend:
+  frontend_dev:
     build:
       context: ./frontend
       dockerfile: Dockerfile.dev
