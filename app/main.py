@@ -1,6 +1,8 @@
 from typing import List, Optional
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+import asyncio
+from models.telegram_api import set_bot_config
 
 from routes import router
 from telegram_router import router as tlg_router
@@ -24,6 +26,9 @@ app.add_middleware(
     allow_headers=["*"],                
 )
 
+@app.on_event("startup")
+async def startup_event():
+    await set_bot_config()
 
 @app.get("/")
 def read_root():

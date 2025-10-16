@@ -5,6 +5,7 @@ import json
 from typing import Optional
 from models.telegram_api import  send_text_message
 from fastapi import Header
+from models.telegram_api import send_menu_keyboard, get_httpx_client
 router = APIRouter(prefix="/telegram")
 
 # Получаем токен из окружения (для проверки вебхука)
@@ -57,18 +58,29 @@ async def telegram_webhook(
     chat_id = message["chat"]["id"]
     text = message.get("text", "")
 
-    if text.startswith("/"):
+    command_dict = {
+        'об использовании персональных данных': 'personal_data',
+        'инструкция':'instructions'
+    }
+
+    command = text.lower().lstrip("/")
+
+    if command:
         # Обрабатываем команду
-        command = text.split()[0].lower().lstrip("/")
 
         template_content = load_template(command)
+        if not template_content:
+            if command in command_dict:
+                template_content = load_template(command_dict[command])
 
         if template_content:
             await send_text_message(chat_id, template_content)
+        elif text == '/start':
+            await send_menu_keyboard(chat_id, get_httpx_client(), 10)
         else:
             await send_text_message(
                 chat_id,
-                "Неизвестная команда. Доступны: /start, /instructions и пр.",
+                f"Неизвестная команда '{text}'. Используйте меню внизу экрана",
                 parse_mode="html"
             )
 
