@@ -86,7 +86,7 @@ async def set_webhook(url: str, secret_token: str) -> Optional[dict]:
         if result.get("ok"):
             print(f"✅ Webhook успешно установлен на: {url}")
         else:
-            print(f"❌ Ошибка установки Webhook: {result.get('description')} {url}")
+            print(f"❌ Ошибка установки Webhook: {result.get('description')} {url} {secret_token}")
 
         return result
 
