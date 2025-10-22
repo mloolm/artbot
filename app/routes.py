@@ -35,6 +35,7 @@ async def create_application_letter(data: ApplicationData):
 
     # --- УСЛОВНАЯ ЛОГИКА ОТВЕТА ---
 
+    print(data)
 
     if data.is_twa and data.telegram_user_id:
         # 🔥 РЕЖИМ 1: TWA (Telegram Web App)
