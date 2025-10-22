@@ -69,6 +69,9 @@ async def set_webhook(url: str, secret_token: str) -> Optional[dict]:
     :param url: Полный HTTPS URL, куда Telegram должен отправлять обновления (например, 'https://yourdomain.com/telegram/webhook/').
     :param secret_token: Секретный токен для заголовка X-Telegram-Bot-Api-Secret-Token.
     """
+
+    url = url.strip()
+
     endpoint = "setWebhook"
     payload = {
         "url": url,
@@ -102,6 +105,8 @@ async def set_twa_menu_button_global(
     """
     Устанавливает глобальную кнопку 'Меню' (Web App) для всех пользователей бота.
     """
+
+    twa_url = twa_url.strip()
     url = TELEGRAM_API_URL + "setChatMenuButton"
 
     menu_button_data = {
