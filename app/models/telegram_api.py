@@ -86,12 +86,12 @@ async def set_webhook(url: str, secret_token: str) -> Optional[dict]:
         if result.get("ok"):
             print(f"✅ Webhook успешно установлен на: {url}")
         else:
-            print(f"❌ Ошибка установки Webhook: {result.get('description')} {url} {secret_token}")
+            print(f"❌ Ошибка установки Webhook: {result.get('description')} ({url}, secret: {secret_token})")
 
         return result
 
     except httpx.HTTPStatusError as e:
-        print(f"🔥 Ошибка HTTP при установке Webhook: {e.response.text} {url} {secret_token}")
+        print(f"🔥 Ошибка HTTP при установке Webhook: {e.response.text} ({url}, secret: {secret_token})")
         return None
     except Exception as e:
         print(f"🔥 Неизвестная ошибка при установке Webhook: {e} {url}")

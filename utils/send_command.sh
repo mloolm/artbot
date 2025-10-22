@@ -7,7 +7,7 @@
 
 # 🔥 1. ЗАМЕНИТЕ ЭТО ВАШИМ СЕКРЕТНЫМ ТОКЕНОМ
 # Это должен быть тот же токен, что и в переменной окружения WEBHOOK_SECRET
-SECRET_TOKEN="SOME_SAFE_DEFAULT_SECRET" 
+SECRET_TOKEN="SOME_SAFE_DEFAULT_SECRET"
 
 # 2. Базовый URL вашего FastAPI-приложения
 API_URL="http://localhost:8000"

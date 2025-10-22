@@ -42,8 +42,6 @@ async def telegram_webhook(
         x_telegram_bot_api_secret_token: str = Header(None)  # Получаем заголовок
 ):
 
-    print(x_telegram_bot_api_secret_token, request)
-
     if WEBHOOK_SECRET and x_telegram_bot_api_secret_token != WEBHOOK_SECRET:
         raise HTTPException(status_code=403, detail="Неверный секретный заголовок.")
 
