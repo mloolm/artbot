@@ -299,7 +299,7 @@ async def send_menu_keyboard(chat_id: int, client: httpx.AsyncClient, row_limit:
 
 
 async def set_bot_config():
-    url = f"{os.getenv('BACK_URL')} /webhook/"
+    url = f"{os.getenv('BACK_URL')} /telegram/webhook/"
     await set_webhook(url, TELEGRAM_BOT_TOKEN)
 
     front_url = os.getenv('FRONT_URL')
