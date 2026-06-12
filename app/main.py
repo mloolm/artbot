@@ -50,4 +50,3 @@ app.include_router(
 )
 
 
-# Теперь ваш эндпоинт POST /letter/ доступен!
