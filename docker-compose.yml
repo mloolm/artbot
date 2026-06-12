@@ -18,6 +18,10 @@ services:
     image: node:20-alpine # Используем образ с NPM
     container_name: svelte_builder
     working_dir: /usr/src/app
+    env_file:
+      - .env
+    environment:
+      - VITE_API_BASE_URL=${BACK_URL}
     volumes:
       - ./frontend:/usr/src/app
     command: sh -c "npm install && npm run build"
